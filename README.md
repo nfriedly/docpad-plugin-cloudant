@@ -2,11 +2,11 @@
 
 <!-- BADGES/ -->
 
-[![Build Status](//travis-ci.org/nfriedly/docpad-plugin-cloudant.svg?branch=master)](https://travis-ci.org/nfriedly/docpad-plugin-cloudant)
-[![NPM version](//badge.fury.io/js/docpad-plugin-cloudant.png)](https://npmjs.org/package/docpad-plugin-cloudant "View this project on NPM")
-[![Dependency Status](//david-dm.org/nfriedly/docpad-plugin-cloudant.png?theme=shields.io)](https://david-dm.org/nfriedly/docpad-plugin-cloudant)
-[![Development Dependency Status](//david-dm.org/nfriedly/docpad-plugin-cloudant/dev-status.png?theme=shields.io)](https://david-dm.org/nfriedly/docpad-plugin-cloudant#info=devDependencies)
-[![Gittip donate button](//img.shields.io/gittip/nfriedly.png)](https://www.gittip.com/nfriedly/ "Donate weekly to this project using Gittip")
+[![Build Status](https://travis-ci.org/nfriedly/docpad-plugin-cloudant.svg?branch=master)](https://travis-ci.org/nfriedly/docpad-plugin-cloudant)
+[![NPM version](https://badge.fury.io/js/docpad-plugin-cloudant.png)](https://npmjs.org/package/docpad-plugin-cloudant "View this project on NPM")
+[![Dependency Status](https://david-dm.org/nfriedly/docpad-plugin-cloudant.png?theme=shields.io)](https://david-dm.org/nfriedly/docpad-plugin-cloudant)
+[![Development Dependency Status](https://david-dm.org/nfriedly/docpad-plugin-cloudant/dev-status.png?theme=shields.io)](https://david-dm.org/nfriedly/docpad-plugin-cloudant#info=devDependencies)
+[![Gittip donate button](https://img.shields.io/gittip/nfriedly.png)](https://www.gittip.com/nfriedly/ "Donate weekly to this project using Gittip")
 
 <!-- /BADGES -->
 
