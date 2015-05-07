@@ -1,0 +1,56 @@
+{
+  "name": "docpad-plugin-mongodb",
+  "version": "2.3.2",
+  "description": "Import your mongodb collections to DocPad collections",
+  "homepage": "https://github.com/nfriedly/docpad-plugin-mongodb/",
+  "license": {
+    "type": "MIT"
+  },
+  "badges": {
+    "travis": true,
+    "npm": true
+  },
+  "keywords": [
+    "docpad",
+    "docpad-plugin",
+    "docpad-importer",
+    "mongodb",
+    "mongo"
+  ],
+  "author": "Nathan Friedly (http://nfriedly.com)",
+  "bugs": {
+    "url": "https://github.com/nfriedly/docpad-plugin-mongodb/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nfriedly/docpad-plugin-mongodb.git"
+  },
+  "engines": {
+    "node": ">=0.4"
+  },
+  "dependencies": {
+    "lodash": "^3.3.0",
+    "mongodb": ">1.4.19 <3",
+    "taskgroup": "^4.0.5"
+  },
+  "peerDependencies": {
+    "docpad": ">=6.46 <7"
+  },
+  "devDependencies": {
+    "cake": "^0.1.1",
+    "chai": "^2.0.0",
+    "coffee-script": "~1.8.0",
+    "docpad": ">=6.46 <7",
+    "joe": "^1.6.0",
+    "joe-reporter-console": "^1.2.1",
+    "projectz": "~0.3.13"
+  },
+  "main": "./out/mongodb.plugin.js",
+  "scripts": {
+    "test": "npm run prepare_test_db && node ./out/mongodb.test.js",
+    "prepare_test_db": "mongo test/prepare_database.mongo.js"
+  },
+  "cakeConfiguration": {
+    "COFFEE_SRC_PATH": "src"
+  }
+}

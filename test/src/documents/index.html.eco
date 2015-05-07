@@ -1,0 +1,10 @@
+---
+title: "mongo documents"
+---
+
+<h2>Test Docs:</h2>
+<ul><% for file in @getCollection('testData').toJSON(): %>
+	<li>
+		<a href="<%= file.url %>"><%= file.title %></a>
+	</li>
+<% end %></ul>
