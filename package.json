@@ -1,6 +1,6 @@
 {
   "name": "docpad-plugin-cloudant",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Import your Cloudant databases to DocPad collections",
   "homepage": "https://github.com/nfriedly/docpad-plugin-cloudant",
   "license": {
