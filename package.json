@@ -1,8 +1,8 @@
 {
-  "name": "docpad-plugin-mongodb",
-  "version": "2.3.2",
-  "description": "Import your mongodb collections to DocPad collections",
-  "homepage": "https://github.com/nfriedly/docpad-plugin-mongodb/",
+  "name": "docpad-plugin-cloudant",
+  "version": "2.0.0",
+  "description": "Import your Cloudant databases to DocPad collections",
+  "homepage": "https://github.com/nfriedly/docpad-plugin-cloudant",
   "license": {
     "type": "MIT"
   },
@@ -14,41 +14,43 @@
     "docpad",
     "docpad-plugin",
     "docpad-importer",
-    "mongodb",
-    "mongo"
+    "cloudant",
+    "couchdb",
+    "couch"
   ],
   "author": "Nathan Friedly (http://nfriedly.com)",
   "bugs": {
-    "url": "https://github.com/nfriedly/docpad-plugin-mongodb/issues"
+    "url": "https://github.com/nfriedly/docpad-plugin-cloudant/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/nfriedly/docpad-plugin-mongodb.git"
+    "url": "https://github.com/nfriedly/docpad-plugin-cloudant.git"
   },
   "engines": {
-    "node": ">=0.4"
+    "node": ">=0.12.2"
   },
   "dependencies": {
+    "cloudant": "^1.0.0-beta3",
     "lodash": "^3.3.0",
-    "mongodb": ">1.4.19 <3",
     "taskgroup": "^4.0.5"
   },
   "peerDependencies": {
-    "docpad": ">=6.46 <7"
+    "docpad": ">=6.78.1 <7"
   },
   "devDependencies": {
+    "async": "^0.9.0",
     "cake": "^0.1.1",
     "chai": "^2.0.0",
-    "coffee-script": "~1.8.0",
+    "coffee-script": "^1.9.2",
     "docpad": ">=6.46 <7",
     "joe": "^1.6.0",
     "joe-reporter-console": "^1.2.1",
     "projectz": "~0.3.13"
   },
-  "main": "./out/mongodb.plugin.js",
+  "main": "./out/cloudant.plugin.js",
   "scripts": {
-    "test": "npm run prepare_test_db && node ./out/mongodb.test.js",
-    "prepare_test_db": "mongo test/prepare_database.mongo.js"
+    "pretest": "node test/prepare_database.js",
+    "test": "node ./out/cloudant.test.js"
   },
   "cakeConfiguration": {
     "COFFEE_SRC_PATH": "src"

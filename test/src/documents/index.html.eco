@@ -3,7 +3,7 @@ title: "mongo documents"
 ---
 
 <h2>Test Docs:</h2>
-<ul><% for file in @getCollection('testData').toJSON(): %>
+<ul><% for file in @getCollection('test_data').toJSON(): %>
 	<li>
 		<a href="<%= file.url %>"><%= file.title %></a>
 	</li>

@@ -1,27 +1,25 @@
 # Prepare
-{MongoClient} = require("mongodb")
+Cloudant = require("cloudant")
 {TaskGroup} = require('taskgroup')
 _ = require('lodash')
 
 # Export
 module.exports = (BasePlugin) ->
   # Define
-  class MongodbPlugin extends BasePlugin
+  class CloudantPlugin extends BasePlugin
     # Name
-    name: 'mongodb'
+    name: 'cloudant'
 
     # Config
     config:
       collectionDefaults:
-        connectionString: process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || "mongodb://localhost/localdev"
+        cloudantConfig: {}
         relativeDirPath: null # defaults to collectionName
         extension: ".json"
         injectDocumentHelper: null
-        collectionName: "mongodb"
-        sort: null # http://documentcloud.github.io/backbone/#Collection-comparator
+        dbName: "cloudant"
         meta: {}
-        query: {}
-        docpadCollectionName: null # defaults to collectionName
+        collectionName: null # defaults to dbName
       collections: []
 
     # DocPad v6.24.0+ Compatible
@@ -37,44 +35,44 @@ module.exports = (BasePlugin) ->
       @
 
     getBasePath: (collectionConfig) ->
-      "#{collectionConfig.relativeDirPath or collectionConfig.collectionName}/"
+      "#{collectionConfig.relativeDirPath or collectionConfig.dbName}/"
 
 
-    # Fetch our documents from mongodb
+    # Fetch our documents from cloudant
     # next(err, mongoDocs)
-    fetchMongodbCollection: (collectionConfig, next) ->
-      MongoClient.connect collectionConfig.connectionString, (err, db) ->
+    fetchCloudantDb: (collectionConfig, next) ->
+      Cloudant collectionConfig.cloudantConfig, (err, cloudant) ->
         return next err if err
-        db.collection(collectionConfig.collectionName).find(collectionConfig.query).toArray (err, mongoDocs) ->
-          db.close()
-          next err, mongoDocs
+        db = cloudant.use(collectionConfig.dbName)
+        db.list {include_docs:true}, (err, body) ->
+          next err, body.rows.map (row) -> row.doc
       # Chain
       @
 
-    # convert JSON doc from mongodb to DocPad-style document/file model
+    # convert JSON doc from cloudant to DocPad-style document/file model
     # "body" of docpad doc is a JSON string of the mongo doc, meta includes all data in mongo doc
-    mongoDocToDocpadDoc: (collectionConfig, mongoDoc, next) ->
+    toDocpadDoc: (collectionConfig, cloudantDoc, next) ->
       # Prepare
       docpad = @docpad
-      id = mongoDoc._id.toString();
+      id = cloudantDoc._id
 
       documentAttributes =
-        data: JSON.stringify(mongoDoc, null, '\t')
+        data: JSON.stringify(cloudantDoc, null, '\t')
         meta: _.defaults(
           {},
           collectionConfig.meta,
 
-          mongoId: id
-          mongodbCollection: collectionConfig.collectionName
+          cloudantId: id
+          cloudantDb: collectionConfig.dbName
           # todo check for ctime/mtime/date/etc. fields and upgrade them to Date objects (?)
           relativePath: "#{@getBasePath(collectionConfig)}#{id}#{collectionConfig.extension}"
-          original: mongoDoc, # this gives the original document without DocPad overwriting certain fields
+          original: cloudantDoc, # this gives the original document without DocPad overwriting certain fields
 
-          mongoDoc # this puts all of the document attributes into the metadata, but some will be overwritten
+          cloudantDoc # this puts all of the document attributes into the metadata, but some will be overwritten
         )
 
       # Fetch docpad doc (if it already exists in docpad db, otherwise null)
-      document = docpad.getFile({mongoId:id})
+      document = docpad.getFile({cloudantId:id})
 
 
       # Existing document
@@ -102,25 +100,25 @@ module.exports = (BasePlugin) ->
         next(null, document)
 
       # Return the document
-      return document
+      document
 
-    addMongoCollectionToDb: (collectionConfig, next) ->
+    importDb: (collectionConfig, next) ->
       docpad = @docpad
       plugin = @
-      plugin.fetchMongodbCollection collectionConfig, (err, mongoDocs) ->
+      plugin.fetchCloudantDb collectionConfig, (err, cloudantDocs) ->
         return next(err) if err
 
-        docpad.log('debug', "Retrieved #{mongoDocs.length} mongo in collection #{collectionConfig.collectionName}, converting to DocPad docs...")
+        docpad.log('debug', "Retrieved #{cloudantDocs.length} documents from Cloudant db #{collectionConfig.dbName}, converting to DocPad docs...")
 
-        docTasks  = new TaskGroup({concurrency:0}).done (err) ->
+        docTasks  = new TaskGroup({concurrency:1}).done (err) ->
           return next(err) if err
-          docpad.log('debug', "Converted #{mongoDocs.length} mongo documents into DocPad docs...")
+          docpad.log('debug', "Converted #{cloudantDocs.length} Coudant documents into DocPad docs...")
           next()
 
-        mongoDocs.forEach (mongoDoc) ->
+        cloudantDocs.forEach (cloudantDoc) ->
           docTasks.addTask (complete) ->
-            docpad.log('debug', "Inserting #{mongoDoc._id} into DocPad database...")
-            plugin.mongoDocToDocpadDoc collectionConfig, mongoDoc, (err) ->
+            docpad.log('debug', "Inserting #{cloudantDoc._id} into DocPad database...")
+            plugin.toDocpadDoc collectionConfig, cloudantDoc, (err) ->
               return complete(err) if err
               docpad.log('debug', 'inserted')
               complete()
@@ -139,29 +137,24 @@ module.exports = (BasePlugin) ->
       config = @getConfig()
 
       # Log
-      docpad.log('info', "Importing MongoDB collection(s)...")
+      docpad.log('info', "Importing Cloudant db(s) into DocPad...")
 
       # concurrency:0 means run all tasks simultaneously
-      collectionTasks = new TaskGroup({concurrency:0}).done (err) ->
-        return next(err) if err
-
-        # Log
-        docpad.log('info', "Imported all mongodb docs...")
-
-        # Complete
-        return next()
+      collectionTasks = new TaskGroup({concurrency:0}).done next
 
       config.collections.forEach (collectionConfig) ->
         collectionTasks.addTask (complete) ->
-          plugin.addMongoCollectionToDb collectionConfig, (err) ->
+          plugin.importDb collectionConfig, (err) ->
             complete(err) if err
 
-            docs = docpad.getFiles {mongodbCollection: collectionConfig.collectionName}, collectionConfig.sort
+            docs = docpad.getFiles {cloudantDb: collectionConfig.dbName}, collectionConfig.sort
+
+            collectionName = collectionConfig.collectionName or collectionConfig.dbName
 
             # Set the collection
-            docpad.setCollection(collectionConfig.docpadCollectionName or collectionConfig.collectionName, docs)
+            docpad.setCollection(collectionName, docs)
 
-            docpad.log('info', "Created DocPad collection \"#{collectionConfig.collectionName}\" with #{docs.length} documents from MongoDB")
+            docpad.log('info', "Created DocPad collection \"#{collectionName}\" with #{docs.length} documents from Cloudant")
             complete()
       collectionTasks.run()
 
