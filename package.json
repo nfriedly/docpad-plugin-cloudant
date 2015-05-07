@@ -47,6 +47,10 @@
     "joe-reporter-console": "^1.2.1",
     "projectz": "~0.3.13"
   },
+  "files": [
+    "out/cloudant.plugin.js",
+    "README.md"
+  ],
   "main": "./out/cloudant.plugin.js",
   "scripts": {
     "pretest": "node test/prepare_database.js",
