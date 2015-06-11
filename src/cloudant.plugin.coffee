@@ -20,6 +20,7 @@ module.exports = (BasePlugin) ->
         dbName: "cloudant"
         meta: {}
         collectionName: null # defaults to dbName
+        includeDesignDocs: false
       collections: []
 
     # DocPad v6.24.0+ Compatible
@@ -114,6 +115,11 @@ module.exports = (BasePlugin) ->
           return next(err) if err
           docpad.log('debug', "Converted #{cloudantDocs.length} Coudant documents into DocPad docs...")
           next()
+
+        isntDesign = (doc) ->
+          return doc.id?.substr 0,8 isnt '_design/'
+
+        cloudantDocs = cloudantDocs.filter(isntDesign) unless collectionConfig.includeDesignDocs
 
         cloudantDocs.forEach (cloudantDoc) ->
           docTasks.addTask (complete) ->
