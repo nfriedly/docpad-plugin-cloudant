@@ -1,3 +1,5 @@
+require('dotenv').load({path: __dirname + "/.env"})
+
 module.exports =
   plugins:
     cloudant:

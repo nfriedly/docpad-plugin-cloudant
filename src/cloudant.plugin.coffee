@@ -117,7 +117,7 @@ module.exports = (BasePlugin) ->
           next()
 
         isntDesign = (doc) ->
-          return doc.id?.substr 0,8 isnt '_design/'
+          return doc._id?.substr 0,8 isnt '_design/'
 
         cloudantDocs = cloudantDocs.filter(isntDesign) unless collectionConfig.includeDesignDocs
 

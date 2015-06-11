@@ -1,3 +1,4 @@
+require('dotenv').load({path: __dirname + "/.env"})
 var Cloudant = require('cloudant');
 var async = require('async');
 Cloudant({url: process.env.CLOUDANT_URL}, function(err, cloudant) {
