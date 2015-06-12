@@ -109,17 +109,17 @@ module.exports = (BasePlugin) ->
       plugin.fetchCloudantDb collectionConfig, (err, cloudantDocs) ->
         return next(err) if err
 
+        isntDesign = (doc) ->
+          return doc._id?.substr(0,8) isnt '_design/'
+
+        cloudantDocs = cloudantDocs.filter(isntDesign) unless collectionConfig.includeDesignDocs
+
         docpad.log('debug', "Retrieved #{cloudantDocs.length} documents from Cloudant db #{collectionConfig.dbName}, converting to DocPad docs...")
 
         docTasks  = new TaskGroup({concurrency:1}).done (err) ->
           return next(err) if err
           docpad.log('debug', "Converted #{cloudantDocs.length} Coudant documents into DocPad docs...")
           next()
-
-        isntDesign = (doc) ->
-          return doc._id?.substr(0,8) isnt '_design/'
-
-        cloudantDocs = cloudantDocs.filter(isntDesign) unless collectionConfig.includeDesignDocs
 
         cloudantDocs.forEach (cloudantDoc) ->
           docTasks.addTask (complete) ->
