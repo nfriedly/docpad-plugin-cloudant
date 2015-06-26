@@ -54,6 +54,29 @@ As imported documents are just like normal documents, you can also list them jus
 <% end %></ul>
 ```
 
+### Using a view instead of fetching every document in the database
+
+This allows you to limit and adjust the data in the cloundant database before downloading it to the docpad database.
+
+``` coffee
+plugins:
+  cloudant:
+    collections: [
+      cloudantConfig: {account: "foo", password: "bar"} // passed directly to the [node.js client](https://github.com/cloudant/nodejs-cloudant), so a `url` is also accepted
+      dbName: "posts"
+      collectionName: "my_view_collection""
+      viewDocument:
+        _id: "_design/my_design_document"
+        views:
+          my_view:
+            # the map function is sent to couchdb as a string.. but you can just wrap a regular function in parenthesis and call .toString() on it ;)
+            map: ((doc) ->
+                emit doc._id, doc
+              ).toString()
+      alwaysReplaceViewDocument: false # When true, the existing view is deleted and recreated before fetching the documents. (This is handy when you're updating your view function.)
+    ]
+```
+
 ## MIT License
 
 Copyright (c) 20154 Nathan Friedly  - http://nfriedly.com/

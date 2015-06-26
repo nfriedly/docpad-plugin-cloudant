@@ -1,10 +1,17 @@
 ---
-title: "mongo documents"
+title: "cloudant documents"
 ---
 
-<h2>Test Docs:</h2>
+<h2>All Docs:</h2>
 <ul><% for file in @getCollection('test_data').toJSON(): %>
 	<li>
 		<a href="<%= file.url %>"><%= file.title %></a>
 	</li>
 <% end %></ul>
+
+<h2>View Docs:</h2>
+<ul><% for file in @getCollection('view_test').toJSON(): %>
+  <li>
+    <a href="<%= file.url %>"><%= file.title %></a>
+  </li>
+  <% end %></ul>
