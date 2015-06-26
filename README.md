@@ -64,7 +64,7 @@ plugins:
     collections: [
       cloudantConfig: {account: "foo", password: "bar"} // passed directly to the [node.js client](https://github.com/cloudant/nodejs-cloudant), so a `url` is also accepted
       dbName: "posts"
-      collectionName: "my_view_collection""
+      collectionName: "my_view_collection"
       viewDocument:
         _id: "_design/my_design_document"
         views:
