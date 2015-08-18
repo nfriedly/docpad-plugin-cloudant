@@ -82,7 +82,7 @@ module.exports = (BasePlugin) ->
               else
                 # if it's a different error, then we need to bail
                 return next(err) if err
-            db.destroy(viewDoc._id, oldViewDoc.ref, next)
+            db.destroy(viewDoc._id, oldViewDoc._rev, next)
 
         if collectionConfig.alwaysReplaceViewDocument
           deleteOldDoc (err) ->
