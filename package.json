@@ -38,14 +38,14 @@
     "docpad": ">=6.78.1 <7"
   },
   "devDependencies": {
-    "async": "^0.9.0",
+    "async": "^1.5.0",
     "cake": "^0.1.1",
-    "chai": "^2.0.0",
+    "chai": "^3.4.1",
     "coffee-script": "^1.9.2",
     "docpad": ">=6.46 <7",
     "joe": "^1.6.0",
     "joe-reporter-console": "^1.2.1",
-    "projectz": "~0.3.13"
+    "projectz": "~1.0.6"
   },
   "files": [
     "out/cloudant.plugin.js",
