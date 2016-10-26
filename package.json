@@ -32,7 +32,7 @@
   "dependencies": {
     "cloudant": "^1.0.0-beta3",
     "lodash": "^4.3.0",
-    "taskgroup": "^4.0.5"
+    "taskgroup": "^5.0.0"
   },
   "peerDependencies": {
     "docpad": ">=6.78.1 <7"
