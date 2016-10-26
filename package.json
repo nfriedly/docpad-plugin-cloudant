@@ -38,7 +38,7 @@
     "docpad": ">=6.78.1 <7"
   },
   "devDependencies": {
-    "async": "^1.5.2",
+    "async": "^2.0.1",
     "cake": "^0.1.1",
     "chai": "^3.5.0",
     "coffee-script": "^1.9.2",
