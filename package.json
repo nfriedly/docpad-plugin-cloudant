@@ -30,7 +30,7 @@
     "node": ">=0.12.2"
   },
   "dependencies": {
-    "cloudant": "^1.0.0-beta3",
+    "cloudant": "^1.6.0",
     "lodash": "^4.3.0",
     "taskgroup": "^4.0.5"
   },
