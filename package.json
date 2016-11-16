@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "cloudant": "^1.0.0-beta3",
-    "lodash": "^4.3.0",
+    "lodash": "^4.17.2",
     "taskgroup": "^4.0.5"
   },
   "peerDependencies": {
